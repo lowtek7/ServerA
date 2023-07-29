@@ -10,15 +10,15 @@ namespace WorldServer.NetCommand.Shared.Entity
 	public enum MovementFlags
 	{
 		None = 0x00000000,
-		Forward = 0x00000001,
-		Backward = 0x00000002,
+		Walk = 0x00000001,
+		Run = 0x00000002,
 		StrafeLeft = 0x00000004,
 		StrafeRight = 0x00000008,
 		TurnLeft = 0x00000010,
 		TurnRight = 0x00000020,
 		PitchUp = 0x00000040,
 		PitchDown = 0x00000080,
-		WalkMode = 0x00000100, // Walking
+		Rotate = 0x00000100, // 회전
 
 		Levitating = 0x00000400,
 		Root = 0x00000800, // [-ZERO] is it really need and correct value
@@ -50,6 +50,8 @@ namespace WorldServer.NetCommand.Shared.Entity
 
 		public float Z { get; set; }
 
+		public float W { get; set; }
+
 		public MovementFlags MovementFlags { get; set; }
 
 		public void SetPosition(float x, float y, float z)
@@ -57,6 +59,15 @@ namespace WorldServer.NetCommand.Shared.Entity
 			X = x;
 			Y = y;
 			Z = z;
+			W = 0f;
+		}
+
+		public void SetRotation(float x, float y, float z, float w)
+		{
+			X = x;
+			Y = y;
+			Z = z;
+			W = w;
 		}
 
 		public static CMD_ENTITY_MOVE Create()
