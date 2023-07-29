@@ -18,11 +18,13 @@ class Program
 		};
 
 		server.Start(DefaultPort);
+		listener.Init(server);
 
 		Debug.WriteLine("Server Online.");
 		while (true)
 		{
 			server.PollEvents();
+			listener.Update();
 			Thread.Sleep(15);
 		}
 

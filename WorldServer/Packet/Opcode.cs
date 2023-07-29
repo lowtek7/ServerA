@@ -11,5 +11,7 @@ namespace Network.Packet
 		CCMD_PLAYER_JOIN = 0x001,
 
 		CMD_ENTITY_MOVE = 0x100,
+
+		SCMD_PLAYER_LOGIN = 0x200,
 	}
 }

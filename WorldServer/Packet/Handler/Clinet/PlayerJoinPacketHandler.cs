@@ -1,8 +1,10 @@
 using MemoryPack;
 using Network.NetCommand;
-using Network.NetCommand.Client.Player;
+using Network.Packet;
+using Network.Packet.Handler;
+using CCMD_PLAYER_SERVERJOIN = WorldServer.NetCommand.Client.Player.CCMD_PLAYER_SERVERJOIN;
 
-namespace Network.Packet.Handler.Clinet
+namespace WorldServer.Packet.Handler.Clinet
 {
 	[PacketOpcode(Opcode.CCMD_PLAYER_JOIN)]
 	public class PlayerJoinPacketHandler : IPacketHandler

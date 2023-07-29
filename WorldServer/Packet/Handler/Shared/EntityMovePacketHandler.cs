@@ -1,8 +1,10 @@
 using MemoryPack;
 using Network.NetCommand;
-using Network.NetCommand.Client.Entity;
+using Network.Packet;
+using Network.Packet.Handler;
+using CMD_ENTITY_MOVE = WorldServer.NetCommand.Shared.Entity.CMD_ENTITY_MOVE;
 
-namespace Network.Packet.Handler.Shared
+namespace WorldServer.Packet.Handler.Shared
 {
 	[PacketOpcode(Opcode.CMD_ENTITY_MOVE)]
 	public class EntityMovePacketHandler : IPacketHandler

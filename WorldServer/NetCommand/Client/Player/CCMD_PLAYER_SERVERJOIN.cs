@@ -1,6 +1,7 @@
 using MemoryPack;
+using Network.NetCommand;
 
-namespace Network.NetCommand.Client.Player
+namespace WorldServer.NetCommand.Client.Player
 {
 	[MemoryPackable]
 	public partial class CCMD_PLAYER_SERVERJOIN : PooledNetCommand<CCMD_PLAYER_SERVERJOIN>
@@ -14,6 +15,6 @@ namespace Network.NetCommand.Client.Player
 			return GetOrCreate();
 		}
 
-		public override short Opcode => (short) Packet.Opcode.CCMD_PLAYER_JOIN;
+		public override short Opcode => (short) Network.Packet.Opcode.CCMD_PLAYER_JOIN;
 	}
 }

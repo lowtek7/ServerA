@@ -1,7 +1,7 @@
-using System;
 using MemoryPack;
+using Network.NetCommand;
 
-namespace Network.NetCommand.Client.Entity
+namespace WorldServer.NetCommand.Shared.Entity
 {
 	/// <summary>
 	/// movement flag는 비트 플래그로 구성
@@ -64,6 +64,6 @@ namespace Network.NetCommand.Client.Entity
 			return GetOrCreate();
 		}
 
-		public override short Opcode => (short) Packet.Opcode.CMD_ENTITY_MOVE;
+		public override short Opcode => (short) Network.Packet.Opcode.CMD_ENTITY_MOVE;
 	}
 }
