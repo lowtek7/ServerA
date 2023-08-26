@@ -4,7 +4,7 @@ using Network.Packet;
 using Network.Packet.Handler;
 using CCMD_PLAYER_SERVERJOIN = WorldServer.NetCommand.Client.Player.CCMD_PLAYER_SERVERJOIN;
 
-namespace WorldServer.Packet.Handler.Clinet
+namespace WorldServer.Packet.Handler.Client
 {
 	[PacketOpcode(Opcode.CCMD_PLAYER_JOIN)]
 	public class PlayerJoinPacketHandler : IPacketHandler

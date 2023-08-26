@@ -107,8 +107,42 @@ public class Listener : INetEventListener
 								targetEntityMove.X = entityMove.X;
 								targetEntityMove.Y = entityMove.Y;
 								targetEntityMove.Z = entityMove.Z;
+								targetEntityMove.MoveType = entityMove.MoveType;
 
 								SendInternal(peer, targetEntityMove);
+							}
+						}
+					}
+
+					break;
+				}
+				case Opcode.CMD_ENTITY_ROTATE:
+				{
+					var peers = server.ConnectedPeerList;
+
+					if (command is CMD_ENTITY_ROTATE entityRotate)
+					{
+						var netId = entityRotate.Id;
+
+						foreach (var peer in peers)
+						{
+							if (peer.Id == netId)
+							{
+								continue;
+							}
+
+							if (peer.ConnectionState == ConnectionState.Connected)
+							{
+								var targetEntityRotate = CMD_ENTITY_ROTATE.Create();
+
+								targetEntityRotate.Id = entityRotate.Id;
+								targetEntityRotate.Time = entityRotate.Time;
+								targetEntityRotate.X = entityRotate.X;
+								targetEntityRotate.Y = entityRotate.Y;
+								targetEntityRotate.Z = entityRotate.Z;
+								targetEntityRotate.W = entityRotate.W;
+
+								SendInternal(peer, targetEntityRotate);
 							}
 						}
 					}
