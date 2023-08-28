@@ -1,0 +1,40 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+	<enums>
+		<enum name="MoveType" value="None, Walk, Run"/>
+	</enums>
+	<packets>
+		<packet name="player_join" type="client">
+			<variables>
+				<variable name="Id" type="int"/>
+				<variable name="Time" type="uint"/>
+			</variables>
+		</packet>
+		<packet name="player_login" type="server">
+			<variables>
+				<variable name="Id" type="int"/>
+				<variable name="Time" type="uint"/>
+			</variables>
+		</packet>
+		<packet name="entity_move" type="shared">
+			<variables>
+				<variable name="Id" type="int"/>
+				<variable name="Time" type="uint"/>
+				<variable name="X" type="float"/>
+				<variable name="Y" type="float"/>
+				<variable name="Z" type="float"/>
+				<variable name="MoveType" type="enum:MoveType"/>
+			</variables>
+		</packet>
+		<packet name="entity_rotate" type="shared">
+			<variables>
+				<variable name="Id" type="int"/>
+				<variable name="Time" type="uint"/>
+				<variable name="X" type="float"/>
+				<variable name="Y" type="float"/>
+				<variable name="Z" type="float"/>
+				<variable name="W" type="float"/>
+			</variables>
+		</packet>
+	</packets>
+</root>
