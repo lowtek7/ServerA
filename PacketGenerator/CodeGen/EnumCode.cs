@@ -2,7 +2,7 @@
 
 namespace PacketGenerator.CodeGen;
 
-public class EnumBody
+public class EnumCode
 {
 	/// <summary>
 	/// 나중에 네임스페이스도 constants 같은곳에서 관리해야할 것.
@@ -15,9 +15,11 @@ namespace RAMG.Packets
 }}";
 
 	private string EnumSourceBegin => $@"
-	public enum {enumName}
+	public enum {enumName}{TypeOption}
 	{{
 ";
+
+	private string TypeOption => string.IsNullOrEmpty(typeOption) ? string.Empty : $" : {typeOption}";
 
 	private string EnumSourceEnd => $@"
 	}}";
@@ -26,10 +28,13 @@ namespace RAMG.Packets
 
 	private string[] enumValues;
 
-	public EnumBody(EnumType enumType)
+	private string typeOption;
+
+	public EnumCode(EnumType enumType)
 	{
 		enumName = enumType.Name;
 		enumValues = enumType.Values;
+		typeOption = enumType.TypeOption;
 	}
 
 	public string ToSource()

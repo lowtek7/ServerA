@@ -5,9 +5,6 @@ using MemoryPack;
 using Network.NetCommand;
 using Network.Packet;
 using Network.Packet.Handler;
-using WorldServer.NetCommand.Client.Player;
-using WorldServer.NetCommand.Server.Player;
-using WorldServer.NetCommand.Shared.Entity;
 using WorldServer.Utility;
 
 namespace WorldServer;
@@ -49,7 +46,7 @@ public class Listener : INetEventListener
 	{
 		var length = reader.GetUShort();
 		var opcodeValue = reader.GetShort();
-		var opcode = (Opcode) opcodeValue;
+		var opcode = (RAMG.Packets.Opcode) opcodeValue;
 
 		reader.GetBytes(buffer, length);
 
@@ -79,15 +76,15 @@ public class Listener : INetEventListener
 		// Queue를 비워주면서 동작.
 		while (commandQueue.TryDequeue(out var command))
 		{
-			var opcode = (Opcode) command.Opcode;
+			var opcode = (RAMG.Packets.Opcode) command.Opcode;
 
 			switch (opcode)
 			{
-				case Opcode.CMD_ENTITY_MOVE:
+				case RAMG.Packets.Opcode.CMD_ENTITY_MOVE:
 				{
 					var peers = server.ConnectedPeerList;
 
-					if (command is CMD_ENTITY_MOVE entityMove)
+					if (command is RAMG.Packets.CMD_ENTITY_MOVE entityMove)
 					{
 						var netId = entityMove.Id;
 
@@ -100,7 +97,7 @@ public class Listener : INetEventListener
 
 							if (peer.ConnectionState == ConnectionState.Connected)
 							{
-								var targetEntityMove = CMD_ENTITY_MOVE.Create();
+								var targetEntityMove = RAMG.Packets.CMD_ENTITY_MOVE.Create();
 
 								targetEntityMove.Id = entityMove.Id;
 								targetEntityMove.Time = entityMove.Time;
@@ -116,11 +113,11 @@ public class Listener : INetEventListener
 
 					break;
 				}
-				case Opcode.CMD_ENTITY_ROTATE:
+				case RAMG.Packets.Opcode.CMD_ENTITY_ROTATE:
 				{
 					var peers = server.ConnectedPeerList;
 
-					if (command is CMD_ENTITY_ROTATE entityRotate)
+					if (command is RAMG.Packets.CMD_ENTITY_ROTATE entityRotate)
 					{
 						var netId = entityRotate.Id;
 
@@ -133,7 +130,7 @@ public class Listener : INetEventListener
 
 							if (peer.ConnectionState == ConnectionState.Connected)
 							{
-								var targetEntityRotate = CMD_ENTITY_ROTATE.Create();
+								var targetEntityRotate = RAMG.Packets.CMD_ENTITY_ROTATE.Create();
 
 								targetEntityRotate.Id = entityRotate.Id;
 								targetEntityRotate.Time = entityRotate.Time;
@@ -149,11 +146,11 @@ public class Listener : INetEventListener
 
 					break;
 				}
-				case Opcode.SCMD_PLAYER_LOGIN:
+				case RAMG.Packets.Opcode.SCMD_PLAYER_LOGIN:
 				{
 					var peers = server.ConnectedPeerList;
 
-					if (command is SCMD_PLAYER_LOGIN playerLogin)
+					if (command is RAMG.Packets.SCMD_PLAYER_LOGIN playerLogin)
 					{
 						var netId = playerLogin.Id;
 
@@ -168,7 +165,7 @@ public class Listener : INetEventListener
 										continue;
 									}
 
-									var playerServerJoin = CCMD_PLAYER_SERVERJOIN.Create();
+									var playerServerJoin = RAMG.Packets.CCMD_PLAYER_JOIN.Create();
 
 									playerServerJoin.Id = targetPeer.Id;
 									playerServerJoin.Time = CurrentTime;
@@ -181,7 +178,7 @@ public class Listener : INetEventListener
 
 							if (peer.ConnectionState == ConnectionState.Connected)
 							{
-								var playerServerJoin = CCMD_PLAYER_SERVERJOIN.Create();
+								var playerServerJoin = RAMG.Packets.CCMD_PLAYER_JOIN.Create();
 
 								playerServerJoin.Id = netId;
 								playerServerJoin.Time = CurrentTime;

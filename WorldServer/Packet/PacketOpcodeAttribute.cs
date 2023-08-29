@@ -8,11 +8,11 @@ namespace Network.Packet.Handler
 	[AttributeUsage(AttributeTargets.Class, AllowMultiple = true)]
 	public class PacketOpcodeAttribute : Attribute
 	{
-		public PacketOpcodeAttribute(Opcode opcode)
+		public PacketOpcodeAttribute(RAMG.Packets.Opcode opcode)
 		{
 			this.Opcode = opcode;
 		}
 
-		public Opcode Opcode { get; }
+		public RAMG.Packets.Opcode Opcode { get; }
 	}
 }

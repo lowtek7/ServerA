@@ -28,6 +28,31 @@ public struct PacketType
 
 	public PacketVariable[] Variables { get; }
 
+	public string FullName
+	{
+		get
+		{
+			var result = string.Empty;
+
+			switch (Type)
+			{
+				case PacketTransferType.Server:
+					result += "S";
+					break;
+				case PacketTransferType.Client:
+					result += "C";
+					break;
+				case PacketTransferType.Shared:
+					break;
+			}
+
+			result += "CMD_";
+			result += Name.ToUpper();
+
+			return result;
+		}
+	}
+
 	public PacketType(string name, PacketTransferType type, PacketVariable[] variables)
 	{
 		Name = name;

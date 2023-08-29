@@ -23,7 +23,7 @@
 				<variable name="X" type="float"/>
 				<variable name="Y" type="float"/>
 				<variable name="Z" type="float"/>
-				<variable name="MoveType" type="enum:MoveType"/>
+				<variable name="MoveType" type="MoveType"/>
 			</variables>
 		</packet>
 		<packet name="entity_rotate" type="shared">

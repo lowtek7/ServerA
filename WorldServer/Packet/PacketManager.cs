@@ -10,7 +10,7 @@ namespace Network.Packet.Handler
 		/// <summary>
 		/// Opcode를 매핑해두는 패킷 핸들러
 		/// </summary>
-		private readonly Dictionary<Opcode, IPacketHandler> PacketHandlers = new Dictionary<Opcode, IPacketHandler>();
+		private readonly Dictionary<RAMG.Packets.Opcode, IPacketHandler> PacketHandlers = new Dictionary<RAMG.Packets.Opcode, IPacketHandler>();
 
 		public void Init()
 		{
@@ -38,7 +38,7 @@ namespace Network.Packet.Handler
 			}
 		}
 
-		public INetCommand ToCommand(Opcode opcode, ReadOnlySpan<byte> bytes)
+		public INetCommand ToCommand(RAMG.Packets.Opcode opcode, ReadOnlySpan<byte> bytes)
 		{
 			if (PacketHandlers.TryGetValue(opcode, out var packetHandler))
 			{

@@ -1,4 +1,5 @@
-﻿using System.Xml;
+﻿using System.Globalization;
+using System.Xml;
 
 namespace PacketGenerator;
 
@@ -12,7 +13,14 @@ public static class StringExtensions
 
 		return char.ToUpper(s[0]) + s.Substring(1).ToLower();
 	}
+
+	public static string ToTitleCase(this string s)
+	{
+		TextInfo textInfo = new CultureInfo("en-US", false).TextInfo;
+		return textInfo.ToTitleCase(s);
+	}
 }
+
 
 public static class PacketXmlParser
 {
@@ -77,6 +85,16 @@ public static class PacketXmlParser
 				}
 			}
 		}
+
+		var packetFullNames = new List<string>();
+
+		// opcode 생성 작업.
+		foreach (var packetType in result.PacketTypes)
+		{
+			packetFullNames.Add(packetType.FullName);
+		}
+
+		result.EnumTypes.Insert(0, new EnumType("Opcode", packetFullNames.ToArray(), "short"));
 
 		return result;
 	}
