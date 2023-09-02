@@ -9,6 +9,7 @@
 
     <ItemGroup>
       <ProjectReference Include="..\LiteNetLib\LiteNetLib.csproj" />
+      <ProjectReference Include="..\World\World.csproj" />
     </ItemGroup>
 
     <ItemGroup>

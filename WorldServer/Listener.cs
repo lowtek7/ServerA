@@ -21,6 +21,8 @@ public class Listener : INetEventListener
 
 	private uint CurrentTime => DateTime.UtcNow.ToUnixTime();
 
+	private readonly World.World _world = new World.World();
+
 	public void Init(NetManager serverInstance)
 	{
 		packetManager.Init();
@@ -153,6 +155,8 @@ public class Listener : INetEventListener
 					if (command is RAMG.Packets.SCMD_PLAYER_LOGIN playerLogin)
 					{
 						var netId = playerLogin.Id;
+
+						_world.TryCreateEntity(netId);
 
 						foreach (var peer in peers)
 						{
