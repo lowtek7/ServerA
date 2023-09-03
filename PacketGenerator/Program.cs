@@ -5,8 +5,8 @@ class Program
 {
 	static void Main(string[] args)
 	{
-		var path = ".\\Packets.xml";
-		var outputPath = ".\\Output";
+		var path = "./Packets.xml";
+		var outputPath = "./Output";
 		var chunk = PacketXmlParser.Parse(path);
 
 		if (!Directory.Exists(outputPath))

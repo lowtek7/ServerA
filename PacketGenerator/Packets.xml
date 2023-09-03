@@ -4,7 +4,7 @@
 		<enum name="MoveType" value="None, Walk, Run"/>
 	</enums>
 	<packets>
-		<packet name="player_join" type="client">
+		<packet name="player_world_join" type="client">
 			<variables>
 				<variable name="Id" type="int"/>
 				<variable name="Time" type="uint"/>
@@ -23,6 +23,9 @@
 				<variable name="X" type="float"/>
 				<variable name="Y" type="float"/>
 				<variable name="Z" type="float"/>
+				<variable name="VelocityX" type="float"/>
+				<variable name="VelocityY" type="float"/>
+				<variable name="VelocityZ" type="float"/>
 				<variable name="MoveType" type="MoveType"/>
 			</variables>
 		</packet>
@@ -34,6 +37,15 @@
 				<variable name="Y" type="float"/>
 				<variable name="Z" type="float"/>
 				<variable name="W" type="float"/>
+			</variables>
+		</packet>
+		<packet name="entity_teleport" type="shared">
+			<variables>
+				<variable name="Id" type="int"/>
+				<variable name="Time" type="uint"/>
+				<variable name="X" type="float"/>
+				<variable name="Y" type="float"/>
+				<variable name="Z" type="float"/>
 			</variables>
 		</packet>
 	</packets>

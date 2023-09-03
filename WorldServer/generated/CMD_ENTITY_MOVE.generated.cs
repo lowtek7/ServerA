@@ -12,6 +12,9 @@ namespace RAMG.Packets
 		public float X { get; set; }
 		public float Y { get; set; }
 		public float Z { get; set; }
+		public float VelocityX { get; set; }
+		public float VelocityY { get; set; }
+		public float VelocityZ { get; set; }
 		public MoveType MoveType { get; set; }
 		public static CMD_ENTITY_MOVE Create()
 		{

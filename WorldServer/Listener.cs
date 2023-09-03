@@ -5,6 +5,8 @@ using MemoryPack;
 using Network.NetCommand;
 using Network.Packet;
 using Network.Packet.Handler;
+using Vim.Math3d;
+using World.System;
 using WorldServer.Utility;
 
 namespace WorldServer;
@@ -89,26 +91,45 @@ public class Listener : INetEventListener
 					if (command is RAMG.Packets.CMD_ENTITY_MOVE entityMove)
 					{
 						var netId = entityMove.Id;
+						var senderIndex = peers.FindIndex(x => x.Id == netId);
 
-						foreach (var peer in peers)
+						if (senderIndex >= 0)
 						{
-							if (peer.Id == netId)
+							var sender = peers[senderIndex];
+							// 핑은 밀리세컨드 단위
+							var senderPing = sender.Ping;
+							var velocity = new Vector3(entityMove.VelocityX, entityMove.VelocityY, entityMove.VelocityZ);
+							
+							foreach (var peer in peers)
 							{
-								continue;
-							}
+								if (peer.Id == netId)
+								{
+									continue;
+								}
 
-							if (peer.ConnectionState == ConnectionState.Connected)
-							{
-								var targetEntityMove = RAMG.Packets.CMD_ENTITY_MOVE.Create();
+								var targetPing = peer.Ping;
 
-								targetEntityMove.Id = entityMove.Id;
-								targetEntityMove.Time = entityMove.Time;
-								targetEntityMove.X = entityMove.X;
-								targetEntityMove.Y = entityMove.Y;
-								targetEntityMove.Z = entityMove.Z;
-								targetEntityMove.MoveType = entityMove.MoveType;
+								if (peer.ConnectionState == ConnectionState.Connected)
+								{
+									var targetEntityMove = RAMG.Packets.CMD_ENTITY_MOVE.Create();
 
-								SendInternal(peer, targetEntityMove);
+									if (_world.TryGetEntity(netId, out var entity))
+									{
+										var simulatePos = MovementSystem.MoveSimulate(entity, velocity, senderPing, targetPing);
+										
+										targetEntityMove.Id = entityMove.Id;
+										targetEntityMove.Time = entityMove.Time;
+										targetEntityMove.X = simulatePos.X;
+										targetEntityMove.Y = simulatePos.Y;
+										targetEntityMove.Z = simulatePos.Z;
+										targetEntityMove.VelocityX = entityMove.VelocityX;
+										targetEntityMove.VelocityY = entityMove.VelocityY;
+										targetEntityMove.VelocityZ = entityMove.VelocityZ;
+										targetEntityMove.MoveType = entityMove.MoveType;
+
+										SendInternal(peer, targetEntityMove);
+									}
+								}
 							}
 						}
 					}

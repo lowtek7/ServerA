@@ -24,8 +24,25 @@
 
 
     <ItemGroup>
-      <Folder Include="Assets\" />
       <Folder Include="generated\" />
+    </ItemGroup>
+
+
+
+    <ItemGroup>
+      <Compile Remove="Assets\**" />
+    </ItemGroup>
+
+
+
+    <ItemGroup>
+      <EmbeddedResource Remove="Assets\**" />
+    </ItemGroup>
+
+
+
+    <ItemGroup>
+      <None Remove="Assets\**" />
     </ItemGroup>
 
 </Project>
