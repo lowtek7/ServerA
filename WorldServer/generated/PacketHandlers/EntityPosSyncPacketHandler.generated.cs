@@ -5,12 +5,12 @@ using Network.Packet.Handler;
 
 namespace RAMG.Packets
 {
-	[PacketOpcode(RAMG.Packets.Opcode.CCMD_PLAYER_JOIN)]
-	public partial class PlayerJoinPacketHandler : IPacketHandler
+	[PacketOpcode(RAMG.Packets.Opcode.CMD_ENTITY_POS_SYNC)]
+	public partial class EntityPosSyncPacketHandler : IPacketHandler
 	{
 		public INetCommand ToCommand(ReadOnlySpan<byte> bytes)
 		{
-			var command = CCMD_PLAYER_JOIN.Create();
+			var command = CMD_ENTITY_POS_SYNC.Create();
 
 			MemoryPackSerializer.Deserialize(bytes, ref command);
 

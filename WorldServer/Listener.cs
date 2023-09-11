@@ -6,6 +6,8 @@ using Network.NetCommand;
 using Network.Packet;
 using Network.Packet.Handler;
 using Vim.Math3d;
+using World.Component;
+using World.Extensions;
 using World.System;
 using WorldServer.Utility;
 
@@ -95,39 +97,85 @@ public class Listener : INetEventListener
 
 						if (senderIndex >= 0)
 						{
-							var sender = peers[senderIndex];
-							// 핑은 밀리세컨드 단위
-							var senderPing = sender.Ping;
 							var velocity = new Vector3(entityMove.VelocityX, entityMove.VelocityY, entityMove.VelocityZ);
-							
-							foreach (var peer in peers)
+
+							if (_world.TryGetEntity(netId, out var entity))
 							{
-								if (peer.Id == netId)
+								var movementComponent = entity.GetOrCreateComponent<MovementComponent>();
+
+								entity.Position = new Vector3(entityMove.X, entityMove.Y, entityMove.Z);
+
+								if (!movementComponent.Velocity.IsAlmostCloseTo(velocity))
 								{
-									continue;
-								}
+									movementComponent.Velocity = velocity;
 
-								var targetPing = peer.Ping;
-
-								if (peer.ConnectionState == ConnectionState.Connected)
-								{
-									var targetEntityMove = RAMG.Packets.CMD_ENTITY_MOVE.Create();
-
-									if (_world.TryGetEntity(netId, out var entity))
+									foreach (var peer in peers)
 									{
-										var simulatePos = MovementSystem.MoveSimulate(entity, velocity, senderPing, targetPing);
-										
-										targetEntityMove.Id = entityMove.Id;
-										targetEntityMove.Time = entityMove.Time;
-										targetEntityMove.X = simulatePos.X;
-										targetEntityMove.Y = simulatePos.Y;
-										targetEntityMove.Z = simulatePos.Z;
-										targetEntityMove.VelocityX = entityMove.VelocityX;
-										targetEntityMove.VelocityY = entityMove.VelocityY;
-										targetEntityMove.VelocityZ = entityMove.VelocityZ;
-										targetEntityMove.MoveType = entityMove.MoveType;
+										if (peer.Id == netId)
+										{
+											continue;
+										}
 
-										SendInternal(peer, targetEntityMove);
+										if (peer.ConnectionState == ConnectionState.Connected)
+										{
+											var targetEntityMove = RAMG.Packets.CMD_ENTITY_MOVE.Create();
+
+											targetEntityMove.Id = entityMove.Id;
+											targetEntityMove.Time = entityMove.Time;
+											targetEntityMove.X = entity.Position.X;
+											targetEntityMove.Y = entity.Position.Y;
+											targetEntityMove.Z = entity.Position.Z;
+											targetEntityMove.VelocityX = entityMove.VelocityX;
+											targetEntityMove.VelocityY = entityMove.VelocityY;
+											targetEntityMove.VelocityZ = entityMove.VelocityZ;
+											targetEntityMove.MoveType = entityMove.MoveType;
+
+											SendInternal(peer, targetEntityMove);
+										}
+									}
+								}
+							}
+						}
+					}
+
+					break;
+				}
+				case RAMG.Packets.Opcode.CMD_ENTITY_POS_SYNC:
+				{
+					var peers = server.ConnectedPeerList;
+
+					if (command is RAMG.Packets.CMD_ENTITY_POS_SYNC entityPosSync)
+					{
+						var netId = entityPosSync.Id;
+						var senderIndex = peers.FindIndex(x => x.Id == netId);
+
+						if (senderIndex >= 0)
+						{
+							if (_world.TryGetEntity(netId, out var entity))
+							{
+								var movementComponent = entity.GetOrCreateComponent<MovementComponent>();
+
+								entity.Position = new Vector3(entityPosSync.X, entityPosSync.Y, entityPosSync.Z);
+								movementComponent.Velocity = Vector3.Zero;
+
+								foreach (var peer in peers)
+								{
+									if (peer.Id == netId)
+									{
+										continue;
+									}
+
+									if (peer.ConnectionState == ConnectionState.Connected)
+									{
+										var targetEntityPosSync = RAMG.Packets.CMD_ENTITY_POS_SYNC.Create();
+
+										targetEntityPosSync.Id = entityPosSync.Id;
+										targetEntityPosSync.Time = entityPosSync.Time;
+										targetEntityPosSync.X = entity.Position.X;
+										targetEntityPosSync.Y = entity.Position.Y;
+										targetEntityPosSync.Z = entity.Position.Z;
+
+										SendInternal(peer, targetEntityPosSync);
 									}
 								}
 							}
@@ -190,7 +238,7 @@ public class Listener : INetEventListener
 										continue;
 									}
 
-									var playerServerJoin = RAMG.Packets.CCMD_PLAYER_JOIN.Create();
+									var playerServerJoin = RAMG.Packets.CCMD_PLAYER_WORLD_JOIN.Create();
 
 									playerServerJoin.Id = targetPeer.Id;
 									playerServerJoin.Time = CurrentTime;
@@ -203,7 +251,7 @@ public class Listener : INetEventListener
 
 							if (peer.ConnectionState == ConnectionState.Connected)
 							{
-								var playerServerJoin = RAMG.Packets.CCMD_PLAYER_JOIN.Create();
+								var playerServerJoin = RAMG.Packets.CCMD_PLAYER_WORLD_JOIN.Create();
 
 								playerServerJoin.Id = netId;
 								playerServerJoin.Time = CurrentTime;

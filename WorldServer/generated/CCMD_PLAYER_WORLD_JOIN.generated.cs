@@ -5,15 +5,15 @@ using Network.NetCommand;
 namespace RAMG.Packets
 {
 	[MemoryPackable]
-	public partial class CCMD_PLAYER_JOIN : PooledNetCommand<CCMD_PLAYER_JOIN>
+	public partial class CCMD_PLAYER_WORLD_JOIN : PooledNetCommand<CCMD_PLAYER_WORLD_JOIN>
 	{
 		public int Id { get; set; }
 		public uint Time { get; set; }
-		public static CCMD_PLAYER_JOIN Create()
+		public static CCMD_PLAYER_WORLD_JOIN Create()
 		{
 			return GetOrCreate();
 		}
 
-		public override short Opcode => (short) RAMG.Packets.Opcode.CCMD_PLAYER_JOIN;
+		public override short Opcode => (short) RAMG.Packets.Opcode.CCMD_PLAYER_WORLD_JOIN;
 	}
 }

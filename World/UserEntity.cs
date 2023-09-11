@@ -8,30 +8,35 @@ namespace World
 {
 	public class UserEntity : IDisposable
 	{
-		private readonly List<IComponent> _components = new List<IComponent>();
-		
 		public int NetId { get; set; }
 
 		public Vector3 Position { get; set; }
 
 		public Quaternion Rotation { get; set; }
 
-		public IComponent? GetComponent<T>() where T : IComponent
-		{
-			return _components.FirstOrDefault(x => x.GetType() == typeof(T)) ?? null;
-		}
+		private readonly Dictionary<Type, IComponent> _components = new Dictionary<Type, IComponent>();
 
-		public IEnumerable<IComponent> GetComponents<T>() where T : IComponent =>
-			_components.Where(x => x.GetType() == typeof(T));
+		public T GetOrCreateComponent<T>() where T : IComponent, new()
+		{
+			if (_components.TryGetValue(typeof(T), out var result))
+			{
+				return (T) result;
+			}
+
+			result = new T();
+			_components.Add(typeof(T), result);
+
+			return (T) result;
+		}
 
 		public void AddComponent(IComponent component)
 		{
-			_components.Add(component);
+			_components.TryAdd(component.GetType(), component);
 		}
 
 		public void AddComponent<T>(IComponent component) where T : IComponent, new()
 		{
-			_components.Add(new T());
+			_components.Add(typeof(T), new T());
 		}
 
 		public void Dispose()

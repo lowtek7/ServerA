@@ -3,10 +3,12 @@ namespace RAMG.Packets
 {
 	public enum Opcode : short
 	{
-		CCMD_PLAYER_JOIN,
+		CCMD_PLAYER_WORLD_JOIN,
 		SCMD_PLAYER_LOGIN,
 		CMD_ENTITY_MOVE,
-		CMD_ENTITY_ROTATE
+		CMD_ENTITY_POS_SYNC,
+		CMD_ENTITY_ROTATE,
+		CMD_ENTITY_TELEPORT
 	}
 
 	public enum MoveType
